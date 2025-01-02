@@ -1,0 +1,2 @@
+# bluetooth_finger_keyboard
+一個程式能夠讓raspberry pi4能夠透過鏡頭偵測手勢來模擬鍵盤輸入，那輸入的內容會透過藍芽傳到你想輸入的設備。

@@ -166,7 +166,7 @@ cd bluetooth_finger_keyboard
     * 有時也會要求00:00:00:00:00:00 -> 那就同樣一行改00:00:00:00:00:00
 
 
-## 五. 執行主程式
+## 5. 執行主程式
 
 ```
 sudo python3 main.py

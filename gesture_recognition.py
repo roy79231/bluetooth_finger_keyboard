@@ -144,7 +144,7 @@ def letter_to_ascii(letter):
 # 如果是兩種鍵盤才能輸入的(ex: _ 要 shift + -)則要額外修改modifier，modifier為額外要按的鍵(ex: shift)，hidcode則填你原本需要按的(ex : -，這邊 - 的hidcode為0x2D，每個鍵都不一樣需要額外查)
 def send_key(key):
     global reportindex
-    global node
+    node = btfpy.Localnode()    
     
     hidcode = 0
     modifier = 0

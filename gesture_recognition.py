@@ -1,12 +1,7 @@
 import btfpy
 import mediapipe as mp
 import cv2
-#from pynput.keyboard import Controller
 
-# 初始化 MediaPipe 和鍵盤模擬
-drawingModule = mp.solutions.drawing_utils
-handsModule = mp.solutions.hands
-#keyboard = Controller()  # 模擬鍵盤輸入
 
 # 定義手勢變數字
 def get_hand_number(landmarks, hand_label):
@@ -145,102 +140,6 @@ def letter_to_ascii(letter):
         return special_keys[letter]
     # 無效輸入返回 0
     return 0
-
-
-# 啟動攝影機
-cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FPS, 4) #設定畫面掃描幀數，越高讀的速度越快，一秒內能輸入的文字也會變多
-
-#基本的藍芽連線設定
-reportmap = [0x05,0x01,0x09,0x06,0xA1,0x01,0x85,0x01,0x05,0x07,0x19,0xE0,0x29,0xE7,0x15,0x00,\
-             0x25,0x01,0x75,0x01,0x95,0x08,0x81,0x02,0x95,0x01,0x75,0x08,0x81,0x01,0x95,0x06,\
-             0x75,0x08,0x15,0x00,0x25,0x65,0x05,0x07,0x19,0x00,0x29,0x65,0x81,0x00,0xC0]
- 
-report = [0,0,0,0,0,0,0,0]
-
-name = "HID"
-appear = [0xC1,0x03]  # 03C1 = keyboard icon appears on connecting device 
-pnpinfo = [0x02,0x6B,0x1D,0x46,0x02,0x37,0x05]
-protocolmode = [0x01]
-hidinfo = [0x01,0x11,0x00,0x02]
-battery = [100] 
-reportindex = -1
-node = 0
-
-# 接受藍芽後持續運行的主程式，
-def lecallback2(clientnode,op,cticn):
-    
-    with handsModule.Hands(static_image_mode=False, min_detection_confidence=0.7, min_tracking_confidence=0.7, max_num_hands=2) as hands:
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                break
-            
-            # 調整影像大小
-            frame1 = cv2.resize(frame, (640, 480))
-            rgb_frame = cv2.cvtColor(frame1, cv2.COLOR_BGR2RGB)
-
-            # 手部偵測
-            results = hands.process(rgb_frame)
-
-            # 繪製框架
-            if results.multi_hand_landmarks:
-                for hand_landmarks in results.multi_hand_landmarks:
-                    drawingModule.draw_landmarks(frame1, hand_landmarks, handsModule.HAND_CONNECTIONS)
-
-
-            if results.multi_hand_landmarks and len(results.multi_handedness)==2:
-                # 確認每隻手都有完整的 21 個 Landmark
-                hands_complete = all(len(hand_landmarks.landmark) == 21 for hand_landmarks in results.multi_hand_landmarks)
-                if hands_complete:
-                    # 儲存左右手的數字
-                    left_hand_number = 0
-                    right_hand_number = 0
-
-                    for idx, hand_landmarks in enumerate(results.multi_hand_landmarks):
-                        # 繪製手部骨架
-                        drawingModule.draw_landmarks(frame1, hand_landmarks, handsModule.HAND_CONNECTIONS)
-
-                        # 獲取手部標記的資訊
-                        landmarks = hand_landmarks.landmark
-
-                        # 判斷是哪隻手
-                        hand_label = results.multi_handedness[idx].classification[0].label  # 左手或右手
-                        wrist = landmarks[0]
-                        palm_center = landmarks[9]
-                        #print(palm_center.y)
-                        #print(wrist.y)
-                        print('-------------------------------------')
-                        # more right , x bigger
-                        # more lower , y bigger
-
-                        # 判斷手掌方向（掌心朝向攝影機）
-                        if palm_center.z < wrist.z:  # 手心朝向鏡頭
-                            hand_number = get_hand_number(landmarks, hand_label)
-                            
-                            # left and right oppositely
-                            if hand_label == "Left":
-                                right_hand_number = hand_number
-                            elif hand_label == "Right":
-                                left_hand_number = hand_number
-
-                    # 計算最終數字並映射到字母
-                    total_number = left_hand_number * 10 + right_hand_number
-                    print(number_to_letter(total_number))
-                    send_key(letter_to_ascii(number_to_letter(total_number)))
-
-            # 顯示影像
-            cv2.imshow("Frame", frame1)
-            key = cv2.waitKey(1) & 0xFF
-            if key == ord("q"):
-                break
-
-    cap.release()
-    cv2.destroyAllWindows()
-    if(op == btfpy.LE_DISCONNECT):
-        return(btfpy.SERVER_EXIT)
-    return(btfpy.SERVER_CONTINUE)
- 
 
 # 將前面預處理好的鍵盤內容傳輸出去
 # 如果是兩種鍵盤才能輸入的(ex: _ 要 shift + -)則要額外修改modifier，modifier為額外要按的鍵(ex: shift)，hidcode則填你原本需要按的(ex : -，這邊 - 的hidcode為0x2D，每個鍵都不一樣需要額外查)
@@ -381,70 +280,3 @@ def send_key(key):
     buf[2] = 0
     btfpy.Write_ctic(node,reportindex,buf,0) 
     return
-
-############ 程式運行(藍芽連線部分) ###########
-   
-if(btfpy.Init_blue("keyboard.txt") == 0):
-  exit(0)
-
-if(btfpy.Localnode() != 1):
-  print("ERROR - Edit keyboard.txt to set ADDRESS = " + btfpy.Device_address(btfpy.Localnode()))
-  exit(0)
-      
-node = btfpy.Localnode()    
-
-# look up Report1 index
-uuid = [0x2A,0x4D]
-reportindex = btfpy.Find_ctic_index(node,btfpy.UUID_2,uuid)
-if(reportindex < 0):
-  print("Failed to find Report characteristic")
-  exit(0)
-
-  # Write data to local characteristics  node=local node
-uuid = [0x2A,0x00]
-btfpy.Write_ctic(node,btfpy.Find_ctic_index(node,btfpy.UUID_2,uuid),name,0) 
-
-uuid = [0x2A,0x01]
-btfpy.Write_ctic(node,btfpy.Find_ctic_index(node,btfpy.UUID_2,uuid),appear,0) 
-
-uuid = [0x2A,0x4E]
-btfpy.Write_ctic(node,btfpy.Find_ctic_index(node,btfpy.UUID_2,uuid),protocolmode,0)
-
-uuid = [0x2A,0x4A]
-btfpy.Write_ctic(node,btfpy.Find_ctic_index(node,btfpy.UUID_2,uuid),hidinfo,0)
-
-uuid = [0x2A,0x4B]
-btfpy.Write_ctic(node,btfpy.Find_ctic_index(node,btfpy.UUID_2,uuid),reportmap,0)
-
-uuid = [0x2A,0x4D]
-btfpy.Write_ctic(node,btfpy.Find_ctic_index(node,btfpy.UUID_2,uuid),report,0)
-
-uuid = [0x2A,0x50]
-btfpy.Write_ctic(node,btfpy.Find_ctic_index(node,btfpy.UUID_2,uuid),pnpinfo,0)
-   
-  #**** battery level *****
-  # uuid = [0x2A,0x19]
-  # btfpy.Write_ctic(node,btfpy.Find_ctic_index(node,btfpy.UUID_2,uuid),battery,1) 
-  #************************     
-                          
-  # Set unchanging random address by hard-coding a fixed value.
-  # If connection produces an "Attempting Classic connection"
-  # error then choose a different address.
-  # If set_le_random_address() is not called, the system will set a
-  # new and different random address every time this code is run.  
- 
-  # Choose the following 6 numbers
-  # 2 hi bits of first number must be 1
-randadd = [0xD3,0x56,0xDB,0x15,0x32,0xA0]
-btfpy.Set_le_random_address(randadd)
-     
-btfpy.Keys_to_callback(btfpy.KEY_ON,0)   # enable LE_KEYPRESS calls in lecallback2
-                                         # 0 = GB keyboard  
-btfpy.Set_le_wait(20000)  # Allow 20 seconds for connection to complete
-                                         
-btfpy.Le_pair(btfpy.Localnode(),btfpy.JUST_WORKS,0)  # Easiest option, but if client requires
-                                                     # passkey security - remove this command  
-
-btfpy.Le_server(lecallback2,0) #連線後執行主程式(手勢辨識)
-  
-btfpy.Close_all()

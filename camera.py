@@ -67,10 +67,7 @@ def lecallback2(clientnode,op,cticn):
                                 left_hand_number = hand_number
 
                     # 計算最終數字並映射到字母
-                    total_number = left_hand_number * 10 + right_hand_number
-                    if(total_number == 99):
-                        cap.release()
-                        cv2.destroyAllWindows()
+                    total_number = left_hand_number * 10 + right_hand_number                        
                     print(number_to_letter(total_number))
                     send_key(letter_to_ascii(number_to_letter(total_number)))
 

@@ -6,9 +6,10 @@ from gesture_recognition import get_hand_number,number_to_letter,letter_to_ascii
 # 初始化 MediaPipe 和鍵盤模擬
 drawingModule = mp.solutions.drawing_utils
 handsModule = mp.solutions.hands
+# 啟動攝影機
 cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_FPS, 4) #設定畫面掃描幀數，越高讀的速度越快，一秒內能輸入的文字也會變多
 
-# 接受藍芽後持續運行的主程式，
 def lecallback2(clientnode,op,cticn):
     
     with handsModule.Hands(static_image_mode=False, min_detection_confidence=0.7, min_tracking_confidence=0.7, max_num_hands=2) as hands:
@@ -67,6 +68,9 @@ def lecallback2(clientnode,op,cticn):
 
                     # 計算最終數字並映射到字母
                     total_number = left_hand_number * 10 + right_hand_number
+                    if(total_number == 99):
+                        cap.release()
+                        cv2.destroyAllWindows()
                     print(number_to_letter(total_number))
                     send_key(letter_to_ascii(number_to_letter(total_number)))
 

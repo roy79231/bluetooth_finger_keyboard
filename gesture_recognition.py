@@ -2,8 +2,6 @@ import btfpy
 import mediapipe as mp
 import cv2
 
-cap = cv2.VideoCapture(0)
-
 # 定義手勢變數字
 def get_hand_number(landmarks, hand_label):
     # 每根手指的尖端和中節關節
@@ -232,8 +230,6 @@ def send_key(key):
         modifier = 0x02
         hidcode = 0x31
     elif(key == 'close'):
-        cap.release()
-        cv2.destroyAllWindows()
         exit(0)
     elif(key == '_'):
         modifier = 0x02  # Shift 修飾符

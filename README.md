@@ -138,10 +138,10 @@ sudo apt-get install libbluetooth-dev python-gobject bluez bluez-tools bluez-fir
 pip install pybluez evdev pydbus future
 ```
 
-2. 把btferret從github上抓下來
+2. 將本專案從github上抓下來
 ```
-sudo git clone https://github.com/petzval/btferret.git
-cd btferret
+sudo git clone https://github.com/roy79231/bluetooth_finger_keyboard.git
+cd bluetooth_finger_keyboard
 ```
 
 3. 建立btferret環境
@@ -166,22 +166,36 @@ cd btferret
     * 有時也會要求00:00:00:00:00:00 -> 那就同樣一行改00:00:00:00:00:00
 
 
-## 下載本程式並執行
-1. 
-    ```
-    cd .. 
-    sudo git clone https://github.com/roy79231/bluetooth_finger_keyboard.git
-    ```
+## 五. 執行主程式
 
-2. 將檔案(keyboard_finger.py)移至btferret資料夾裡面
-
-3. 到資料夾並執行
-    ```
-    cd btferret
-    sudo python3 keyboard_finger.py
-    ```
+```
+sudo python3 main.py
+```
     
 # 4. 程式說明
+
+以下皆為btferret插件建立程式: 
+```
+btlib.c
+btlib.h
+btfpython.c
+btfpy.py
+btferret.py
+devices.txt
+```
+
+測試程式:
+```
+keyboard.py
+keyboard.txt (這同時也是之後鍵盤的設定文件)
+```
+
+運作程式:
+```
+main.py #負責藍芽連線
+camera.py #攝像機開啟及相關設定
+gesture_recognition.py #手勢辨識相關函式
+```
 
 # 參考文件
 1. mediapipe安裝手冊( https://pypi.org/project/mediapipe-rpi4/ )

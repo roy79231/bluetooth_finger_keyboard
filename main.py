@@ -3,9 +3,6 @@ import mediapipe as mp
 import cv2
 from camera import lecallback2
 
-# 初始化 MediaPipe 和鍵盤模擬
-drawingModule = mp.solutions.drawing_utils
-handsModule = mp.solutions.hands
 
 # 啟動攝影機
 cap = cv2.VideoCapture(0)

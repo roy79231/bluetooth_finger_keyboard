@@ -2,6 +2,7 @@ import btfpy
 import mediapipe as mp
 import cv2
 
+cap = cv2.VideoCapture(0)
 
 # 定義手勢變數字
 def get_hand_number(landmarks, hand_label):

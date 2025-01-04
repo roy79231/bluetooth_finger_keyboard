@@ -6,6 +6,7 @@ from gesture_recognition import get_hand_number,number_to_letter,letter_to_ascii
 # 初始化 MediaPipe 和鍵盤模擬
 drawingModule = mp.solutions.drawing_utils
 handsModule = mp.solutions.hands
+cap = cv2.VideoCapture(0)
 
 # 接受藍芽後持續運行的主程式，
 def lecallback2(clientnode,op,cticn):

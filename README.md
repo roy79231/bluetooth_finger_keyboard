@@ -4,13 +4,21 @@ Made by Roy Yang
 
 # 1. 介紹
 
-這是個程式能夠讓raspberry pi4能夠透過鏡頭偵測手勢來模擬鍵盤輸入，那輸入的內容會透過藍芽傳到你想輸入的設備。
+這是個程式能夠讓raspberry pi4能夠透過鏡頭偵測手勢(目前是透過比數字，左手為十位數，右手為個位數)來模擬鍵盤輸入，那輸入的內容會透過藍芽傳到你想輸入的設備。
 
 示意圖 (以下是輸入capslock的樣子) :　
 ![image](https://hackmd.io/_uploads/r1Vy3-ZU1e.png)
 
+# 2. 功能範圍
 
-# 2. 所需設備
+支援的按鍵範圍 : 
+![image](https://hackmd.io/_uploads/B1bEQWvUJl.png)
+
+數字與按鍵的對照表(存在gesture_recognition.py檔裡面)
+![image](https://hackmd.io/_uploads/HkB9QZDL1g.png)
+
+
+# 3. 所需設備
 
 *  硬體
     1. raspberry pi4 (我使用的是model B)
@@ -29,9 +37,9 @@ Made by Roy Yang
     3. ffmpeg(一個組合包，為了能讓mediapipe正常運行)
     4. btferret(github上有人做的藍芽鍵盤輸入)
 
-# 3. 安裝流程
+# 4. 安裝流程
 
-## 1. 安裝openCV
+## I. 安裝openCV
 
 1. 設定
 ```
@@ -63,7 +71,7 @@ make -j4
 sudo make install
 ```
 
-## 2. 安裝FFmpeg
+## II. 安裝FFmpeg
 
 1. 先安裝前置插件( fdk-aac, mp3lame, libass, x264 )，以確保後面下載能正常運行
 
@@ -118,7 +126,7 @@ sudo dpkg -i ffmpeg_4.4.0-1_armhf.deb
 常見的錯誤 : 
 * configure那塊出現error -> 解法: 根據他哪個插件出現error就直接去install對應的插件( 那要注意載的環境對不對，sudo跟一般的環境是不同的，且要用pip3才會載到python3 )
 
-## 3. 安裝mediapipe
+## III. 安裝mediapipe
 
 1. 先安裝額外獨立的插件
     ```
@@ -130,7 +138,7 @@ sudo dpkg -i ffmpeg_4.4.0-1_armhf.deb
 sudo pip3 install mediapipe-rpi4
 ```
 
-## 4. 安裝btferret
+## IV. 安裝btferret
 
 1. 先安裝些基本的藍牙套件
 ```
@@ -166,13 +174,13 @@ cd bluetooth_finger_keyboard
     * 有時也會要求00:00:00:00:00:00 -> 那就同樣一行改00:00:00:00:00:00
 
 
-## 5. 執行主程式
+## V. 執行主程式
 
 ```
 sudo python3 main.py
 ```
     
-# 4. 程式說明
+# 5. 程式說明
 
 以下皆為btferret插件建立程式: 
 ```

@@ -16,9 +16,11 @@ Made by Roy Yang
 # 2. 功能範圍
 
 支援的按鍵範圍 : 
+
 ![image](image/support_key.png)
 
 數字與按鍵的對照表(存在gesture_recognition.py檔裡面)
+
 ![image](image/mapping.png)
 
 註:
@@ -36,6 +38,7 @@ Made by Roy Yang
     ![image](image/complete.png)
 
 * 作業系統 (x32位元)
+
     ![image](image/os.png)
 
 

@@ -9,18 +9,22 @@ Made by Roy Yang
 **demo影片** : (https://youtu.be/fyJb-fbfNwY)
 
 示意圖 (以下是輸入capslock的樣子) :　
-![image](https://hackmd.io/_uploads/r1Vy3-ZU1e.png)
+![image](image/show.png)
 
 
 
 # 2. 功能範圍
 
 支援的按鍵範圍 : 
-![image](https://hackmd.io/_uploads/B1bEQWvUJl.png)
+![image](image/support_key.png)
 
 數字與按鍵的對照表(存在gesture_recognition.py檔裡面)
-![image](https://hackmd.io/_uploads/HkB9QZDL1g.png)
+![image](image/mapping.png)
 
+註:
+* single為單引號 '
+* double為雙引號 "
+* reverse為反斜線 \
 
 # 3. 所需設備
 
@@ -29,10 +33,10 @@ Made by Roy Yang
     2. 攝像鏡頭模組
     * 組完示意圖
 
-    ![471742449_570701075758329_6262762927944395521_n](https://hackmd.io/_uploads/Syvf5W781l.jpg)
+    ![image](image/complete.png)
 
 * 作業系統 (x32位元)
-    ![image](https://hackmd.io/_uploads/B1IqfzNLJl.png)
+    ![image](image/os.png)
 
 
 * 核心python套件
@@ -165,7 +169,7 @@ cd bluetooth_finger_keyboard
     ```
 
     * 常出現錯誤 : 
-    * ![iot_error](https://hackmd.io/_uploads/BkTMFfNUye.png) -> 解法:去device.txt把DEVICE=MyPI TYPE=MESH  NODE=1  這行的ADDRESS改成ADDRESS=AA:AA:AA:AA:AA:AA
+    * ![image](image/iot_error_btferret.png) -> 解法:去device.txt把DEVICE=MyPI TYPE=MESH  NODE=1  這行的ADDRESS改成ADDRESS=AA:AA:AA:AA:AA:AA
 
 4. 測試
     ```
@@ -174,7 +178,7 @@ cd bluetooth_finger_keyboard
     * 這時其他設備可以在藍芽上看到有名為HID的鍵盤可以連線，連線後就可以透過樹莓派的鍵盤做輸入了
 
     * 常出現錯誤 :　
-    * ![image](https://hackmd.io/_uploads/Bk3hnM4Lyg.png)-> 解法:去keyboard.txt把DEVICE=MyPI TYPE=MESH  NODE=1 這行的ADDRESS改成 ADDRESS=AA:AA:AA:AA:AA:AA
+    * ![image](image/iot_error_keyboard.png)-> 解法:去keyboard.txt把DEVICE=MyPI TYPE=MESH  NODE=1 這行的ADDRESS改成 ADDRESS=AA:AA:AA:AA:AA:AA
     * 有時也會要求00:00:00:00:00:00 -> 那就同樣一行改00:00:00:00:00:00
 
 
@@ -187,11 +191,11 @@ sudo python3 main.py
 正常運行的情況下 : 
 
 1. 開始藍芽配對
-    * ![image](https://hackmd.io/_uploads/H1gyBgK81e.png)
+    * ![image](image/bluetooth_pair_wait.png)
 2. 會被當作叫HID的鍵盤發現
-    * ![image](https://hackmd.io/_uploads/S1gjHetLkl.png)
+    * ![image](image/HID.png)
 3. 連線成功，終端機那邊會顯示PAIR OK，且會跳出相機的畫面方便操作
-    * ![image](https://hackmd.io/_uploads/SyuMIgKL1x.png)
+    * ![image](image/bluetooth_pair_ok.png)
     
 # 5. 程式說明
 

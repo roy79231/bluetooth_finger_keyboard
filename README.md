@@ -6,8 +6,12 @@ Made by Roy Yang
 
 這是個程式能夠讓raspberry pi4能夠透過鏡頭偵測手勢(目前是透過比數字，左手為十位數，右手為個位數)來模擬鍵盤輸入，那輸入的內容會透過藍芽傳到你想輸入的設備。
 
+**demo影片** : (https://youtu.be/fyJb-fbfNwY)
+
 示意圖 (以下是輸入capslock的樣子) :　
 ![image](https://hackmd.io/_uploads/r1Vy3-ZU1e.png)
+
+
 
 # 2. 功能範圍
 
@@ -179,6 +183,15 @@ cd bluetooth_finger_keyboard
 ```
 sudo python3 main.py
 ```
+
+正常運行的情況下 : 
+
+1. 開始藍芽配對
+    * ![image](https://hackmd.io/_uploads/H1gyBgK81e.png)
+2. 會被當作叫HID的鍵盤發現
+    * ![image](https://hackmd.io/_uploads/S1gjHetLkl.png)
+3. 連線成功，終端機那邊會顯示PAIR OK，且會跳出相機的畫面方便操作
+    * ![image](https://hackmd.io/_uploads/SyuMIgKL1x.png)
     
 # 5. 程式說明
 
